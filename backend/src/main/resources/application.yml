@@ -1,0 +1,71 @@
+spring:
+  application:
+    name: intelligent-marker-backend
+  
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/grading_system}
+    username: ${SPRING_DATASOURCE_USERNAME:admin}
+    password: ${SPRING_DATASOURCE_PASSWORD:password}
+    driver-class-name: org.postgresql.Driver
+  
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+    # ✅ Critical config: ensure data.sql executes after Hibernate initialization
+    defer-datasource-initialization: true
+
+  # ✅ Enable automatic data.sql execution (required for demo)
+  sql:
+    init:
+      mode: always
+      encoding: UTF-8
+      continue-on-error: true  # Continue startup instead of failing if data already exists
+  
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+  
+  task:
+    execution:
+      pool:
+        core-size: 5
+        max-size: 10
+        queue-capacity: 100
+    scheduling:
+      pool:
+        size: 3
+
+server:
+  port: 8080
+
+# Aliyun OSS Configuration
+aliyun:
+  oss:
+    endpoint: ${ALIYUN_OSS_ENDPOINT:oss-cn-shanghai.aliyuncs.com}
+    access-key-id: ${ALIYUN_OSS_ACCESS_KEY:your-access-key}
+    access-key-secret: ${ALIYUN_OSS_SECRET_KEY:your-secret-key}
+    bucket-name: ${ALIYUN_OSS_BUCKET:intelligent-marker}
+
+# OpenAI Configuration (Real API prioritized, mock as fallback)
+# Using cost-effective gpt-4o-mini for both text and vision
+openai:
+  api-key: ${OPENAI_API_KEY:}
+  model: ${OPENAI_MODEL:gpt-4o-mini}
+  vision:
+    enabled: ${OPENAI_VISION_ENABLED:true}  # Default enabled, will use real API if key configured
+    model: ${OPENAI_VISION_MODEL:gpt-4o-mini}  # gpt-4o-mini supports vision at much lower cost
+
+# Application Configuration
+app:
+  scoring:
+    confidence-threshold: 0.85
+  notification:
+    max-retry-attempts: 3
+    retry-delay-seconds: 60
+
