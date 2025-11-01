@@ -24,11 +24,13 @@ jobs:
     - name: Build backend
       run: |
         cd backend
+        chmod +x mvnw
         ./mvnw clean package -DskipTests
 
     - name: Run backend tests
       run: |
         cd backend
+        chmod +x mvnw
         ./mvnw test
       continue-on-error: true
 
