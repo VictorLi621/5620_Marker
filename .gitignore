@@ -13,6 +13,9 @@
 *.tar.gz
 *.rar
 
+# Exception: Keep Maven Wrapper jar
+!.mvn/wrapper/maven-wrapper.jar
+
 # Maven
 target/
 pom.xml.tag
